@@ -9,7 +9,10 @@ exports.getAllTours = async (req, res) => {
       data: tours,
     });
   } catch (err) {
-    console.log(err);
+    res.status(404).json({
+      status: 'fail',
+      message: err,
+    });
   }
 };
 
