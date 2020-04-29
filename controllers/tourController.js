@@ -9,7 +9,9 @@ exports.getAllTours = async (req, res) => {
       delete queryObj[element];
     });
 
-    const query = Tour.find(queryObj);
+    let queryStr = JSON.stringify(queryObj);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+    const query = Tour.find(JSON.parse(queryStr));
     const tours = await query;
     //testing the branches
     res.status(200).json({
