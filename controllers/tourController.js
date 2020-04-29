@@ -11,6 +11,7 @@ exports.getAllTours = async (req, res) => {
 
     const query = Tour.find(queryObj);
     const tours = await query;
+    //testing the branches
     res.status(200).json({
       status: 'success',
       results: tours.length,
