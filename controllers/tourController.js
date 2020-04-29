@@ -9,7 +9,8 @@ exports.getAllTours = async (req, res) => {
       delete queryObj[element];
     });
 
-    const tours = await Tour.find(queryObj);
+    const query = Tour.find(queryObj);
+    const tours = await query;
     res.status(200).json({
       status: 'success',
       results: tours.length,
