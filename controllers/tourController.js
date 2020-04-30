@@ -28,6 +28,13 @@ exports.getAllTours = async (req, res) => {
       query = query.select('-__v');
     }
 
+    // pagination
+    const page = req.query.page * 1 || 1;
+    const limit = req.query.limit * 1 || 100;
+    const skip = (page - 1) * limit;
+
+    query = query.skip(skip).limit(limit);
+
     const tours = await query;
     //testing the branches
     res.status(200).json({
