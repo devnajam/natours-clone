@@ -17,7 +17,6 @@ exports.getAllTours = async (req, res) => {
       .paginate();
 
     const tours = await features.query;
-    //testing the branches
     res.status(200).json({
       status: 'success',
       results: tours.length,
