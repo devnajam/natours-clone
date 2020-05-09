@@ -64,8 +64,8 @@ exports.protect = catchAsync(async (req, res, next) => {
   }
 
   const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-  const freshUser = await User.findById(decoded.id);
-  if (!freshUser)
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser)
     next(
       new AppError(
         'The user belonging to this token does not exists anymore',
@@ -73,11 +73,11 @@ exports.protect = catchAsync(async (req, res, next) => {
       )
     );
 
-  if (freshUser.changedPasswordAfter(decoded.iat)) {
+  if (currentUser.changedPasswordAfter(decoded.iat)) {
     return next(
       new AppError('Password was changed recently please login again', 401)
     );
   }
-
+  req.user = currentUser;
   next();
 });
