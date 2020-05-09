@@ -1,6 +1,7 @@
 const User = require('../models/userModel');
 const catchAsync = require('../utils/catchAsync');
 const jwt = require('jsonwebtoken');
+const AppError = require('../utils/appError');
 
 exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
@@ -25,4 +26,13 @@ exports.signup = catchAsync(async (req, res, next) => {
       user: newUser,
     },
   });
+});
+
+exports.login = catchAsync(async (req, res, next) => {
+  const { email, password } = req.body;
+  if (!email || !password) {
+    return next(new AppError('please provide email and password', 400));
+  }
+
+  const user = await User.findOne({ email }).select('+password');
 });
