@@ -5,14 +5,20 @@ const globalErrorHandler = require('./controllers/errorController');
 const tourRouter = require('./routes/tourRoutes');
 const userRouter = require('./routes/userRoutes');
 const rateLimit = require('express-rate-limit');
+const helmet = require('helmet');
 
 const app = express();
 
 // 1) Global MIDDLEWARES
+
+//security http headers
+app.use(helmet());
+
+//development
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
-
+//limit requests form same api
 const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
@@ -21,9 +27,13 @@ const limiter = rateLimit({
 
 app.use('/api', limiter);
 
-app.use(express.json());
+//bodyparser
+app.use(express.json({ limit: '10kb' }));
+
+//serving static files
 app.use(express.static(`${__dirname}/public`));
 
+//test middleware
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
