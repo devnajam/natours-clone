@@ -1,3 +1,3 @@
 # natours-clone
 
-This is a website from a course
+This is a REST API
